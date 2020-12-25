@@ -10,5 +10,10 @@ module.exports={
         });
         // inyecta el html entre las seleccionadas
         return opciones.fn().html=html;
+    },
+    tipoContrato:(seleccionado,opciones)=>{
+        return opciones.fn(this).replace(
+            new RegExp(` value="${seleccionado}"`), '$& selected="selected"'
+        )
     }
 }
