@@ -9,11 +9,14 @@ const cookieParser=require('cookie-parser');
 const session=require('express-session');
 const MongoStore=require('connect-mongo')(session);
 const bodyparser=require('body-parser');
+const expressValidator=require('express-validator');
+const flash=require('connect-flash');
 
 const app = express();
 // bodyparser
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:true}));
+app.use(expressValidator());
 // habilita handlebars como template engime
 app.engine('handlebars',
     exphbs({
@@ -32,6 +35,13 @@ app.use(session({
     saveUninitialized:false,
     store:new MongoStore({mongooseConnection:mongoose.connection})
 }));
+// alertas y flash messages
+app.use(flash());
+// middleware
+app.use((req,res,next)=>{
+    res.locals.mesajes=req.flash();
+    next();
+})
 app.use('/',router());
 
 app.listen(process.env.PUERTO,()=>{
