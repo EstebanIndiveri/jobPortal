@@ -11,6 +11,7 @@ const MongoStore=require('connect-mongo')(session);
 const bodyparser=require('body-parser');
 const expressValidator=require('express-validator');
 const flash=require('connect-flash');
+const passport=require('./config/passport');
 
 const app = express();
 // bodyparser
@@ -27,19 +28,24 @@ app.engine('handlebars',
 app.set('view engine','handlebars');
 // static
 app.use(express.static(path.join(__dirname,'/public')));
-app.use(cookieParser());
-app.use(session({
-    secret:process.env.SECRETO,
-    key:process.env.KEY,
-    resave:false,
-    saveUninitialized:false,
-    store:new MongoStore({mongooseConnection:mongoose.connection})
-}));
 // alertas y flash messages
 app.use(flash());
+app.use(cookieParser());
+app.use(session({
+    // cookie:{maxAge:60000},
+    secret:process.env.SECRETO,
+    // key:process.env.KEY,
+    resave:false,
+    saveUninitialized:true,
+    // store:new MongoStore({mongooseConnection:mongoose.connection})
+}));
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // middleware
 app.use((req,res,next)=>{
-    res.locals.mesajes=req.flash();
+    res.locals.mensajes=req.flash();
     next();
 });
 app.use('/',router());

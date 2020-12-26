@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     // clear
     let alertas=document.querySelector('.alertas');
     if(alertas){
-        limpiarAlertas();
+        // limpiarAlertas();
     }
 
     if(skills){

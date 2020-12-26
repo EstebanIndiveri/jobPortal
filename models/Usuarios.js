@@ -33,6 +33,7 @@ usuariosSchema.pre('save',async function(next){
     this.password=hash;
     next();
 });
+// ya esta registrado=alerta
 usuariosSchema.post('save', function(error,doc,next){
     // console.log(error.name,error.code);
     if(error.name==='MongoError' && error.code===11000){
@@ -41,4 +42,10 @@ usuariosSchema.post('save', function(error,doc,next){
         next(error);
     };
 });
+// auth usuarios
+usuariosSchema.methods={
+    compararPassword:function(password){
+        return bcrypt.compareSync(password,this.password);
+    }
+}
 module.exports=mongoose.model('Usuarios',usuariosSchema);
