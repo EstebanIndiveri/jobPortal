@@ -33,4 +33,13 @@ usuariosSchema.pre('save',async function(next){
     this.password=hash;
     next();
 });
+usuariosSchema.post('save',function(error,doc,next){
+    // console.log(error.name,error.code);
+    if(error.name==='MongoError' && error.code===11000){
+        next('Ese correo ya esta registrado');
+    }else{
+        next(error);
+        console.log('AAA')
+    };
+});
 module.exports=mongoose.model('Usuarios',usuariosSchema);

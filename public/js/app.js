@@ -43,9 +43,12 @@ const skillsSeleccionados=()=>{
 }
 const limpiarAlertas=()=>{
     const alertas=document.querySelector('.alertas');
-   setInterval(() => {
+   const interval=setInterval(() => {
     if(alertas.children.length>0){
         alertas.removeChild(alertas.children[0])
+    }else if(alertas.children.length===0){
+        alertas.parentElement.removeChild(alertas);
+        clearInterval(interval);
     }
    }, 2000);
 }
