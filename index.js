@@ -41,7 +41,7 @@ app.use(flash());
 app.use((req,res,next)=>{
     res.locals.mesajes=req.flash();
     next();
-})
+});
 app.use('/',router());
 
 app.listen(process.env.PUERTO,()=>{
