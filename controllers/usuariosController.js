@@ -29,8 +29,14 @@ exports.validarRegistro=(req,res,next)=>{
 
     const errores=req.validationErrors();
     if(errores){
-        console.log(errores);
-        
+        // console.log(errores);
+        req.flash('error',errores.map(err=>err.msg));
+        res.render('crear-cuenta',{
+        nombrePagina:'Crear tu cuenta en devJobos',
+        tagline:'Comienza a publicar tus vacantes gratis, solo debes crear una cuenta',
+        mensajes:req.flash()
+        })
+        return;
     }
     next();
     return;
