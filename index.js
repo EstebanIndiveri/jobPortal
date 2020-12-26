@@ -34,10 +34,10 @@ app.use(cookieParser());
 app.use(session({
     // cookie:{maxAge:60000},
     secret:process.env.SECRETO,
-    // key:process.env.KEY,
+    key:process.env.KEY,
     resave:false,
     saveUninitialized:true,
-    // store:new MongoStore({mongooseConnection:mongoose.connection})
+    store:new MongoStore({mongooseConnection:mongoose.connection})
 }));
 // passport
 app.use(passport.initialize());

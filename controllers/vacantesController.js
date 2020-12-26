@@ -8,9 +8,11 @@ exports.formularioNuevaVacante=(req,res,next)=>{
 }
 exports.agregarVacante=async (req,res,next)=>{
     const vacante=new Vacante(req.body);
+      // author
+      vacante.autor=req.user._id;
     //arreglo de skills
     vacante.skills=req.body.skills.split(','); 
-    // save
+    // savee
     const nuevaVacante= await vacante.save();
     // redirect
     res.redirect(`/vacantes/${nuevaVacante.url}`);
@@ -37,6 +39,7 @@ exports.formEditarVacante= async(req,res,next)=>{
 }
 exports.editarVacante=async(req,res,next)=>{
     const vacanteActualizada=req.body;
+  
     vacanteActualizada.skills=req.body.skills.split(',');
     // console.log(vacanteActualizada);
     const vacante=await Vacante.findOneAndUpdate({url:req.params.url},vacanteActualizada,{
