@@ -52,3 +52,14 @@ exports.formIniciarSesion=(req,res,next)=>{
         nombrePagina:'Iniciar Sesión devJobs'
     })
 }
+
+// form editar perfil
+exports.fornmEditarPerfil=(req,res)=>{
+    const{nombre,email}=req.user;
+    console.log(nombre);
+    res.render('editar-perfil',{
+        nombrePagina:'Editar tu perfil en devJobs',
+        nombre,
+        email
+    })
+}
