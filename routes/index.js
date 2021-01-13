@@ -40,7 +40,7 @@ module.exports=()=>{
     router.get('/administracion',authController.verificarUsuario,authController.mostrarPanel)
 
     router.get('/editar-perfil',authController.verificarUsuario,usuariosController.fornmEditarPerfil)
-
+    router.post('/editar-perfil',authController.verificarUsuario,usuariosController.editarPerfil);
 
     return router;
 

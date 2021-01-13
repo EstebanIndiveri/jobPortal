@@ -63,3 +63,16 @@ exports.fornmEditarPerfil=(req,res)=>{
         email
     })
 }
+exports.editarPerfil= async(req,res,next)=>{
+    const usuario=await Usuarios.findById(req.user._id);
+    usuario.nombre=req.body.nombre;
+    usuario.email=req.body.email;
+    if(req.body.password){
+        usuario.pasword=req.body.password;
+    }
+    await usuario.save();
+    
+    req.flash('correcto','Cambios guardados correctamente');
+
+    res.redirect('/administracion');
+}
