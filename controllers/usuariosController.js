@@ -60,6 +60,7 @@ exports.fornmEditarPerfil=(req,res)=>{
     res.render('editar-perfil',{
         nombrePagina:'Editar tu perfil en devJobs',
         nombre,
+        cerrarSesion:true,
         email
     })
 }
@@ -74,5 +75,5 @@ exports.editarPerfil= async(req,res,next)=>{
     
     req.flash('correcto','Cambios guardados correctamente');
 
-    res.redirect('/administracion');
+    res.redirect('/administracion'); 
 }

@@ -36,6 +36,9 @@ module.exports=()=>{
     router.get('/iniciar-sesion',usuariosController.formIniciarSesion);
     router.post('/iniciar-sesion',authController.autenticarUsuario)
 
+    // singonut
+    router.get('/cerrar-sesion',authController.verificarUsuario,authController.cerrarSesion)
+
     // administración
     router.get('/administracion',authController.verificarUsuario,authController.mostrarPanel)
 
