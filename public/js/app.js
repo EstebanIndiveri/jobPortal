@@ -17,7 +17,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
     const vacantesListado=document.querySelector('.panel-administracion');
     if(vacantesListado){
+    console.log(vacantesListado);
         vacantesListado.addEventListener('click',accionesListado)
+
+
     }
 })
 
@@ -62,5 +65,8 @@ const limpiarAlertas=()=>{
 
 // eliminar vacantes
 const accionesListado=e=>{
-    console.log(e);
+    // e.preventDefault();
+    console.log(e.target);
+
+
 }
