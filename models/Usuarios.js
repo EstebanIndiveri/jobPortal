@@ -20,7 +20,8 @@ const usuariosSchema=new mongoose.Schema({
 
     },
     token:String,
-    expira:Date
+    expira:Date,
+    imagen:String
 });
 // metodo de hash pass
 usuariosSchema.pre('save',async function(next){

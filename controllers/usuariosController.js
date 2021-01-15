@@ -1,4 +1,52 @@
+const multer = require('multer');
 const Usuarios=require('../models/Usuarios');
+const shortid=require('shortid');
+
+exports.subirImagen=(req,res,next)=>{
+    upload(req,res,function(error){
+        if(error){
+            if(error instanceof multer.MulterError){
+                return next();
+            }else{
+                req.flash('error',error.message); 
+            }
+            res.redirect('/administracion');
+            return;
+        }else{
+            return next();
+        }
+        
+    });
+}
+
+
+// config multer
+const configuracionMulter={
+    storage: fileStorage=multer.diskStorage({
+        destination:(req,file,cb)=>{
+            cb(null,__dirname+'../../public/uploads/perfiles');
+        },
+        filename:(req,file,cb)=>{
+            // cb(null,file);
+            // console.log(file);
+            const extension=file.mimetype.split('/')[1];
+            // console.log(`${shortid.generate()}.${extension}`);
+            cb(null,`${shortid.generate()}.${extension}`);
+        }
+    }),
+    fileFilter(req,file,cb){
+        if(file.mimetype==='image/jpeg'||file.mimetype==='image/png'||file.mimetype==='image/jpg'){
+            // cb true o false
+            cb(null,true);
+        }else{
+            cb(new Error('Formato no válido'),false);
+        }
+    },
+    limits:{fileSize:100000}
+}
+const upload=multer(configuracionMulter).single('imagen');
+
+
 exports.formCrearCuenta=(req,res,next)=>{
     res.render('crear-cuenta',{
         nombrePagina:'Crear tu cuenta en devJobos',
@@ -56,7 +104,7 @@ exports.formIniciarSesion=(req,res,next)=>{
 // form editar perfil
 exports.fornmEditarPerfil=(req,res)=>{
     const{nombre,email}=req.user;
-    console.log(nombre);
+    // console.log(nombre);
     res.render('editar-perfil',{
         nombrePagina:'Editar tu perfil en devJobs',
         nombre,
@@ -70,6 +118,9 @@ exports.editarPerfil= async(req,res,next)=>{
     usuario.email=req.body.email;
     if(req.body.password){
         usuario.pasword=req.body.password;
+    }
+    if(req.file){
+        usuario.imagen=req.file.filename;
     }
     await usuario.save();
     

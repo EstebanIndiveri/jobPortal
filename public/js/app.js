@@ -62,8 +62,52 @@ const limpiarAlertas=()=>{
 
 // eliminar vacantes
 const accionesListado=e=>{
-    // e.preventDefault();
-    console.log(e.target);
+    e.preventDefault();
+    // console.log(e.target.dataset.eliminar);
+    if(e.target.dataset.eliminar===''|| e.target.dataset.eliminar){        
+        // delete
+        Swal.fire({
+            title: '¿Eliminar la vacante?',
+            text: "No se podrá recuperar",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar',
+            cancelButtonText:'No, cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                // peticion
+                const url=`${location.origin}/vacantes/eliminar/${e.target.dataset.eliminar}`;
+
+                // axios
+                axios.delete(url,{params:{url}}).then((respuesta)=>{
+                    if(respuesta.status===200){
+                        
+                        Swal.fire(
+                            'Deleted!',
+                            respuesta.data,
+                            'success'
+                        );
+                        // Eliminar del dom
+                            e.target.parentElement.parentElement.parentElement.removeChild(e.target.parentElement.parentElement);
+                    }
+                }).catch(()=>{
+                    Swal.fire({
+                        type:'error',
+                        title:'Hubo un error',
+                        text:'No se pudo eliminar'
+                    })
+                });
+
+            }
+          })
+    }else if(e.target.href===undefined || e.target.href==='' || e.target.href===null){
+        return;
+    }else{
+        window.location.href=e.target.href;
+        console.log(e.target.href)
+    }
 
 
 }

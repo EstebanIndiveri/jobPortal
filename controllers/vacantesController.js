@@ -1,3 +1,4 @@
+const { restart } = require('nodemon');
 const Vacante=require('../models/Vacantes');
 
 exports.formularioNuevaVacante=(req,res,next)=>{
@@ -90,6 +91,24 @@ exports.validarVacante=(req,res,next)=>{
 
 exports.eliminarVacante=async(req,res)=>{
     const{id}=req.params;
-    console.log(id);
+    // console.log(id);
+    const vacante=await Vacante.findById(id);
+    if(verificarAutor(vacante,req.user)){
+        // es el user
+    vacante.remove();
+    res.status(200).send('Vacante Eliminada correctamente');
 
+    }else{
+        // no auth
+    res.status(403).send('Error');
+
+    }
+
+}
+
+const verificarAutor=(vacante={},usuario={})=>{
+ if(!vacante.autor.equals(usuario._id)){
+     return false;
+ }
+ return true;
 }

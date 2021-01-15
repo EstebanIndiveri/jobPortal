@@ -19,7 +19,6 @@ exports.verificarUsuario=(req,res,next)=>{
 exports.mostrarPanel=async(req,res)=>{
     // consultar auth
     const vacantes=await Vacantes.find({autor:req.user._id}).lean();
-
     res.render('administracion',{
         nombrePagina:'Panel de administración',
         tagline:'Crea y Administra tus vacantes desde aquí',
