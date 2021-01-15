@@ -2,6 +2,12 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 document.addEventListener('DOMContentLoaded',()=>{
+
+    const vacantesListado=document.querySelector('.panel-administracion');
+    if(vacantesListado){
+    console.log(vacantesListado);
+        vacantesListado.addEventListener('click',accionesListado)
+    }
     const skills=document.querySelector('.lista-conocimientos');
 
     // clear
@@ -15,13 +21,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         // en editar llama la funcion
         skillsSeleccionados();
     }
-    const vacantesListado=document.querySelector('.panel-administracion');
-    if(vacantesListado){
-    console.log(vacantesListado);
-        vacantesListado.addEventListener('click',accionesListado)
-
-
-    }
+    
 })
 
 const skills=new Set();
