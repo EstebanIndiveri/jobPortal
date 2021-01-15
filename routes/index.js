@@ -27,6 +27,9 @@ module.exports=()=>{
     router.get('/vacantes/editar/:url',authController.verificarUsuario,vacantesController.formEditarVacante);
     router.post('/vacantes/editar/:url',authController.verificarUsuario,vacantesController.validarVacante,vacantesController.editarVacante);
 
+    // Eliminar vacante
+    router.delete('/vacantes/eliminar/id',vacantesController.eliminarVacante)
+
     // crear user
     router.get('/crear-cuenta',usuariosController.formCrearCuenta);
     router.post('/crear-cuenta',
