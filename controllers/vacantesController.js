@@ -2,6 +2,9 @@ const { restart } = require('nodemon');
 const Usuarios = require('../models/Usuarios');
 const Vacante=require('../models/Vacantes');
 
+const multer=require('multer');
+const shortid=require('shortid');
+
 exports.formularioNuevaVacante=(req,res,next)=>{
     res.render('nueva-vacante',{
         nombrePagina:'Nueva Vacante',
@@ -116,4 +119,68 @@ const verificarAutor=(vacante={},usuario={})=>{
      return false;
  }
  return true;
+}
+
+exports.subirCV=(req,res,next)=>{
+    upload(req,res,function(error){
+        if(error){
+            if(error instanceof multer.MulterError){
+                // return next();
+                if(error.code==='LIMIT_FILE_SIZE'){
+                    req.flash('error','El archivo es muy grande:Máximo 100kb');
+                }else{
+                    req.flash('error',error.message);
+                }
+            }else{
+                req.flash('error',error.message); 
+            }
+            res.redirect('back');
+            return;
+        }else{
+            return next();
+        }
+        
+    });
+}
+const configuracionMulter={
+    limits:{fileSize:100000},
+    storage: fileStorage=multer.diskStorage({
+        destination:(req,file,cb)=>{
+            cb(null,__dirname+'../../public/uploads/cv');
+        },
+        filename:(req,file,cb)=>{
+            // cb(null,file);
+            // console.log(file);
+            const extension=file.mimetype.split('/')[1];
+            // console.log(`${shortid.generate()}.${extension}`);
+            cb(null,`${shortid.generate()}.${extension}`);
+        }
+    }),
+    fileFilter(req,file,cb){
+        if(file.mimetype==='application/pdf'){
+            // cb true o false
+            cb(null,true);
+        }else{
+            cb(new Error('Formato no válido'),false);
+        }
+    }
+    
+}
+
+const upload=multer(configuracionMulter).single('cv');
+// save candidatos
+exports.contactar=async(req,res,next)=>{
+    const vacante=await Vacante.findOne({url:req.params.url});
+    if(!vacante)return next();
+    const nuevoCandidato={
+        nombre:req.body.nombre,
+        email:req.body.email,
+        cv:req.file.filename
+    }
+    // save vacante
+    vacante.candidatos.push(nuevoCandidato);
+    await vacante.save();
+    // flash y red
+    req.flash('correcto', 'Se envió tu cv correctamente');
+    res.redirect('/');
 }

@@ -53,6 +53,12 @@ module.exports=()=>{
     usuariosController.subirImagen,
     usuariosController.editarPerfil);
 
+    // mensajes de candidatos
+    router.post('/vacantes/:url',
+    vacantesController.subirCV,
+    vacantesController.contactar
+    )
+
     return router;
 
 }
