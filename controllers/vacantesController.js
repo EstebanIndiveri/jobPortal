@@ -1,4 +1,5 @@
 const { restart } = require('nodemon');
+const Usuarios = require('../models/Usuarios');
 const Vacante=require('../models/Vacantes');
 
 exports.formularioNuevaVacante=(req,res,next)=>{
@@ -22,8 +23,10 @@ exports.agregarVacante=async (req,res,next)=>{
     res.redirect(`/vacantes/${nuevaVacante.url}`);
 }
 exports.mostrarVacante=async(req,res,next)=>{
-    const vacante=await Vacante.findOne({url:req.params.url}).lean();
-
+    const vacante=await Vacante.findOne({url:req.params.url}).populate('autor').lean();
+    // console.log(vacante.autor._id);
+    // const imagen1=await Usuarios.findById(vacante.autor._id);
+    // console.log(imagen1);
     // sino hay results
     if(!vacante)return next();
     res.render('vacante',{
