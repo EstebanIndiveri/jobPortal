@@ -6,7 +6,12 @@ exports.subirImagen=(req,res,next)=>{
     upload(req,res,function(error){
         if(error){
             if(error instanceof multer.MulterError){
-                return next();
+                // return next();
+                if(error.code==='LIMIT_FILE_SIZE'){
+                    req.flash('error','El archivo es muy grande:Máximo 100kb');
+                }else{
+                    req.flash('error',error.message);
+                }
             }else{
                 req.flash('error',error.message); 
             }
@@ -18,10 +23,11 @@ exports.subirImagen=(req,res,next)=>{
         
     });
 }
-
+// LIMIT_FILE_SIZE
 
 // config multer
 const configuracionMulter={
+    limits:{fileSize:100000},
     storage: fileStorage=multer.diskStorage({
         destination:(req,file,cb)=>{
             cb(null,__dirname+'../../public/uploads/perfiles');
@@ -41,8 +47,8 @@ const configuracionMulter={
         }else{
             cb(new Error('Formato no válido'),false);
         }
-    },
-    limits:{fileSize:100000}
+    }
+    
 }
 const upload=multer(configuracionMulter).single('imagen');
 
@@ -103,13 +109,14 @@ exports.formIniciarSesion=(req,res,next)=>{
 
 // form editar perfil
 exports.fornmEditarPerfil=(req,res)=>{
-    const{nombre,email}=req.user;
+    const{nombre,email,imagen}=req.user;
     // console.log(nombre);
     res.render('editar-perfil',{
         nombrePagina:'Editar tu perfil en devJobs',
         nombre,
         cerrarSesion:true,
-        email
+        email,
+        imagen
     })
 }
 exports.editarPerfil= async(req,res,next)=>{
@@ -147,6 +154,7 @@ exports.validarPerfil=(req,res,next)=>{
             nombre:req.user.nombre,
             cerrarSesion:true,
             email:req.user.email,
+            imagen:req.user.imagen,
             mensajes:req.flash()
         })
     }
