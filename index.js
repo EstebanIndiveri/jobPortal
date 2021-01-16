@@ -65,6 +65,8 @@ app.use((error,req,res)=>{
     res.render('error');
 })
 
-app.listen(process.env.PUERTO,()=>{
-    console.log('Conectado al puerto', process.env.PUERTO)
+const puerto= process.env.PORT || process.env.PUERTO;
+
+app.listen(puerto,()=>{
+    console.log('Conectado al puerto', puerto)
 });
