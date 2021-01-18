@@ -66,7 +66,7 @@ app.use((error,req,res)=>{
 })
 
 const puerto= process.env.PORT || process.env.PUERTO;
-
+console.log(puerto);
 app.listen(puerto,()=>{
     console.log('Conectado al puerto', puerto)
 });
